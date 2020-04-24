@@ -1,13 +1,23 @@
 package school.cesar.ppcd.av1.ex2;
+import java.util.concurrent.Semaphore;
 
 public class Main {
 	public static void main(String[] args) {
-		FakeLongTask fakeLongTask = new FakeLongTask();
+		
+		Semaphore mutex = new Semaphore(1);
+		FakeLongTask fakeLongTask = new FakeLongTask(mutex);
 		Thread threadFakeLongTask = new Thread(fakeLongTask);
 		threadFakeLongTask.start();
-		while (!fakeLongTask.isDone()) {
-			System.out.println("waiting...");
+			
+		synchronized(mutex){
+			try {
+				System.out.println("waiting...");
+				mutex.wait();
+				System.out.println("done!");
+			} catch (Exception e) {
+				//TODO: handle exception
+			}
 		}
-		System.out.println("done!");
+		// System.out.println("teste");
 	}
 }
