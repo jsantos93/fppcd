@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.Semaphore;
 
 public class SharedCounterServerRunnable implements Runnable {
-	private final Socket client;
+	private Socket client;
 	private DataInputStream dataInputStream;
 	private DataOutputStream dataOutputStream;
 	private static final byte[] INC = new byte[] { 'I' };
@@ -23,7 +23,7 @@ public class SharedCounterServerRunnable implements Runnable {
 	public void run() {
 		try {
 			while(true){
-				if(this.dataInputStream.read(INC) == 1){
+				if(this.dataInputStream.read() == 73){
 					try {
 						mutex.acquire();
 						int valorAtual = valor;
